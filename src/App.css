@@ -67,7 +67,7 @@ article {
   margin: 2rem auto;
   border-radius: 10px;
   padding: 1.5rem;
-  margin-top: 5.75rem;
+  margin-top: 6rem;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   margin-bottom: 5.5rem;
 }
@@ -116,6 +116,8 @@ header > ol {
 /* Align text within center of container, allow container to fill all unused space within parent (header) flexbox */
 .header--title {
   text-align: center;
+  text-decoration: none;
+  color: #CEB888;
   flex-grow: 1;
   margin: 0;
   font-family:Verdana, Geneva, Tahoma, sans-serif;
@@ -126,10 +128,20 @@ header > ol {
 .header--link {
   text-decoration: none;
   color: #CEB888;
+  font-size: 1rem;
 }
 
 .header--link:hover {
   color: #D6A831;
+}
+
+.header--button {
+  background: none;
+  border: none;
+}
+
+.header--button:hover {
+  cursor: pointer;
 }
 
 /* General Form styling */
@@ -137,7 +149,7 @@ form {
   padding: 1.25rem;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  max-width: 31.25rem;
+  max-width: 60rem;
   margin: 2.5rem auto;
   animation: fadeIn 1s ease-out;
 }
@@ -153,8 +165,22 @@ form {
   }
 }
 
-form div {
-  margin-bottom: 0.9375rem;
+fieldset {
+  margin-bottom: 3rem;
+}
+
+.form--section--containers {
+  margin-bottom: 2rem;
+}
+
+.form--fields--container {
+  display: flex;
+  gap: 2rem;
+  justify-content: space-between;
+}
+
+.form--field {
+  margin-bottom: 1rem;
 }
 
 label {
@@ -163,7 +189,7 @@ label {
   margin-bottom: 0.3125rem;
 }
 
-input {
+input, textarea, select {
   width: 100%;
   padding: 0.625rem;
   background-color: #782F40;
@@ -173,7 +199,11 @@ input {
   font-size: 1rem;
 }
 
-input:focus {
+.time--date--field {
+  width: 13rem;
+}
+
+input:focus, textarea:focus, select:focus {
   background-color: #CEB888;
   color: black;
   outline: none;
@@ -191,7 +221,7 @@ input:focus {
   transition: background-color 0.3s ease;
 }
 
-button:hover {
+.form--button:hover {
   background-color: #D6A831;
 }
 
@@ -230,7 +260,6 @@ footer {
 /***** Table Styles *****/
 table {
   table-layout: fixed;
-  width: 100%;
   max-width: 100%;
   border-collapse: collapse;
   margin-top: 2.5rem;

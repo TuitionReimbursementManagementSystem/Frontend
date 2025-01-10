@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createForm, setForm } from "../../features/forms/formSlice";
+import { createForm } from "../../features/forms/formSlice";
 import Dropdown from "../Dropdown";
 import { useNavigate } from "react-router-dom";
 
@@ -9,7 +9,7 @@ export default function NewForm() {
 
     // Define redux global state handlers:
     const dispatch = useDispatch();
-    const {loading, error, form} = useSelector(state => state.forms);
+    const {form, loading, error} = useSelector(state => state.forms);
 
     // Configure navigation to transition to attachments page on submit:
     const navigate = useNavigate();
@@ -29,14 +29,8 @@ export default function NewForm() {
         passingGrade: undefined,
         eventType: undefined,
         justification: undefined,
-        hoursMissed: 0,
-        attachment: undefined,
-        supervisorAttachment: undefined,
-        departmentHeadAttachment: undefined
+        hoursMissed: 0
     });
-
-    // Set up a boolean to see whether or not the form has been submitted. Used to prevent the useEffect from triggering if component mounts with a form already loaded in the store:
-    const [isSubmitted, setIsSubmitted] = useState(false);
 
     // Update local form data fields as user inputs:
     const handleChange = (event) => {
@@ -62,12 +56,12 @@ export default function NewForm() {
         dispatch(createForm(formData));
     }
 
-    // If the form object is updated in the store, navigate to the attachments page:
+    // Once we have a Form object loaded into the store, proceed to attachments:
     useEffect(() => {
         if(form) {
             navigate("/forms/attachments");
         }
-    },[form, navigate]);
+    }, [dispatch, form])
 
     return(
         <section>
@@ -75,85 +69,87 @@ export default function NewForm() {
                 <h2>Reimbursement Request Form</h2>
                 <fieldset>
                     <legend>Employee Details</legend>
-                    <div>
-                        <label>Username</label>
-                        <input 
-                            type="text"
-                            name="username"
-                            value={formData.username}
-                            onChange={handleChange}
-                            aria-label="Enter username"
-                            required
-                        />
-                        <span style={{color: 'red'}}>*</span>
+                    <div className="form--fields--container">
+                        <div className="form--field">
+                            <label htmlFor="username">Username<span style={{color: 'red'}}>*</span></label>
+                            <input 
+                                type="text"
+                                name="username"
+                                value={formData.username}
+                                onChange={handleChange}
+                                aria-label="Enter username"
+                                required
+                            />
+                        </div>
+                        <div className="form--field">
+                            <label htmlFor="email">Email<span style={{color: 'red'}}>*</span></label>
+                            <input 
+                                type="email"
+                                name="email"
+                                value={formData.email}
+                                onChange={handleChange}
+                                aria-label="Enter email address"
+                                required
+                            />
+                        </div>
                     </div>
-                    <div>
-                        <label>First name</label>
-                        <input 
-                            type="text"
-                            name="firstName"
-                            value={formData.firstName}
-                            onChange={handleChange}
-                            aria-label="Enter first name"
-                            required
-                        />
-                        <span style={{color: 'red'}}>*</span>
-                    </div>
-                    <div>
-                        <label>Last name</label>
-                        <input 
-                            type="text"
-                            name="lastName"
-                            value={formData.lastName}
-                            onChange={handleChange}
-                            aria-label="Enter last name"
-                            required
-                        />
-                        <span style={{color: 'red'}}>*</span>
-                    </div>
-                    <div>
-                        <label>Email</label>
-                        <input 
-                            type="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            aria-label="Enter email address"
-                            required
-                        />
-                        <span style={{color: 'red'}}>*</span>
+                    <div className="form--fields--container">
+                        <div className="form--field">
+                            <label htmlFor="firstName">First name<span style={{color: 'red'}}>*</span></label>
+                            <input 
+                                type="text"
+                                name="firstName"
+                                value={formData.firstName}
+                                onChange={handleChange}
+                                aria-label="Enter first name"
+                                required
+                            />
+                        </div>
+                        <div className="form--field">
+                            <label htmlFor="lastName">Last name<span style={{color: 'red'}}>*</span></label>
+                            <input 
+                                type="text"
+                                name="lastName"
+                                value={formData.lastName}
+                                onChange={handleChange}
+                                aria-label="Enter last name"
+                                required
+                            />
+                        </div>
                     </div>
                 </fieldset>
                 <fieldset>
                     <legend>General Event Details</legend>
-                    <div>
-                        <label>Event Start Time</label>
-                        <input 
-                            type="time"
-                            name="time"
-                            value={formData.time}
-                            onChange={handleChange}
-                            placeholder="HH:mm"
-                            aria-label="Enter event starting time"
-                            required
-                        />
-                        <span style={{color: 'red'}}>*</span>
+                    <div className="form--fields--container">
+                        <div className="form--field">
+                            <label htmlFor="time">Event Start Time<span style={{color: 'red'}}>*</span></label>
+                            <input 
+                                className="time--date--field"
+                                type="time"
+                                name="time"
+                                value={formData.time}
+                                onChange={handleChange}
+                                placeholder="HH:mm"
+                                aria-label="Enter event starting time"
+                                required
+                            />
+                        </div>
+                        <div className="form--field">
+                            <label htmlFor="date">Event Start Date<span style={{color: 'red'}}>*</span></label>
+                            <input 
+                                className="time--date--field"
+                                type="date"
+                                name="date"
+                                value={formData.date}
+                                onChange={handleChange}
+                                placeholder="YYYY-MM-DD"
+                                aria-label="Enter event start date"
+                                required
+                            />
+                        </div>
                     </div>
-                    <div>
-                        <label>Event Start Date</label>
-                        <input 
-                            type="date"
-                            name="date"
-                            value={formData.date}
-                            onChange={handleChange}
-                            placeholder="YYYY-MM-DD"
-                            aria-label="Enter event start date"
-                            required
-                        />
-                        <span style={{color: 'red'}}>*</span>
-                    </div>
-                    <div>
-                        <label>Location</label>
+                    <div className="form--field">
+                        <label htmlFor="location">Location<span style={{color: 'red'}}>*</span></label>
                         <input 
                             type="text"
                             name="location"
@@ -162,58 +158,21 @@ export default function NewForm() {
                             aria-label="Enter event location"
                             required
                         />
-                        <span style={{color: 'red'}}>*</span>
                     </div>
                     <div>
-                        <label>Brief description of the event</label>
-                        <input 
-                            type="text"
+                        <label htmlFor="description">Brief description of the event<span style={{color: 'red'}}>*</span></label>
+                        <textarea
                             name="description"
                             value={formData.description}
                             onChange={handleChange}
                             aria-label="Enter event description"
                             required
                         />
-                        <span style={{color: 'red'}}>*</span>
                     </div>
                 </fieldset>
                 <fieldset>
                     <legend>Work-related Details</legend>
-                    <div>
-                        <label>Cost</label>
-                        <input 
-                            type="number"
-                            step={0.01}
-                            name="cost"
-                            value={formData.cost}
-                            onChange={handleChange}
-                            aria-label="Enter event cost"
-                            required
-                        />
-                        <span style={{color: 'red'}}>*</span>
-                    </div>
-                    <div>
-                        <Dropdown
-                            label="Grade Format"
-                            name="gradeFormat"
-                            value={formData.gradeFormat}
-                            onChange={handleChange}
-                            fetchOptions={fetchGradeFormats}
-                            required
-                            transformOption={option => option.replace(/_/g, " ").toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase())}
-                        />
-                    </div>
-                    <div>
-                        <label>Passing Grade</label>
-                        <input 
-                            type="text"
-                            name="passingGrade"
-                            value={formData.passingGrade}
-                            onChange={handleChange}
-                            aria-label="Select grade needed to pass"
-                        />
-                    </div>
-                    <div>
+                    <div className="form--field">
                         <Dropdown
                             label="Event Type"
                             name="eventType"
@@ -224,26 +183,61 @@ export default function NewForm() {
                             transformOption={option => option.replace(/_/g, " ").toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase())}
                         />
                     </div>
-                    <div>
-                        <label>Justification</label>
+                    <div className="form--fields--container">
+                        <div className="form--field">
+                            <Dropdown
+                                label="Grade Format"
+                                name="gradeFormat"
+                                value={formData.gradeFormat}
+                                onChange={handleChange}
+                                fetchOptions={fetchGradeFormats}
+                                required
+                                transformOption={option => option.replace(/_/g, " ").toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase())}
+                            />
+                        </div>
+                        <div className="form--field">
+                            <label htmlFor="passingGrade">Passing Grade</label>
+                            <input 
+                                type="text"
+                                name="passingGrade"
+                                value={formData.passingGrade}
+                                onChange={handleChange}
+                                aria-label="Select grade needed to pass"
+                            />
+                        </div>
+                    </div>
+                    <div className="form--fields--container">
+                    <div className="form--field">
+                        <label htmlFor="cost">Cost<span style={{color: 'red'}}>*</span></label>
                         <input 
-                            type="text"
-                            name="justification"
-                            value={formData.justification}
+                            type="number"
+                            step={0.01}
+                            name="cost"
+                            value={formData.cost}
                             onChange={handleChange}
-                            aria-label="Enter work-related justification"
+                            aria-label="Enter event cost"
                             required
                         />
-                        <span style={{color: 'red'}}>*</span>
                     </div>
-                    <div>
-                        <label>Work Hours to be Missed</label>
+                    <div className="form--field">
+                        <label htmlFor="hoursMissed">Work Hours to be Missed</label>
                         <input 
                             type="number"
                             name="hoursMissed"
                             value={formData.hoursMissed}
                             onChange={handleChange}
                             aria-label="Enter work hours that will be missed"
+                        />
+                    </div>
+                    </div>
+                    <div>
+                        <label htmlFor="justification">Justification<span style={{color: 'red'}}>*</span></label>
+                        <textarea 
+                            name="justification"
+                            value={formData.justification}
+                            onChange={handleChange}
+                            aria-label="Enter work-related justification"
+                            required
                         />
                     </div>
                 </fieldset>

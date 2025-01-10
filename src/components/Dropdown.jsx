@@ -44,7 +44,7 @@ export default function Dropdown({
             ) : (
                 <select
                     name={name}
-                    value={value}
+                    value={value || ""}
                     onChange={onChange}
                     required={required}
                 >

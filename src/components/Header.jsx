@@ -1,8 +1,8 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Dropdown from "./Dropdown";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { getAllUsers } from "../features/users/userSlice";
+import { getAllUsers, logout } from "../features/users/userSlice";
 
 
 export default function Header() {
@@ -10,6 +10,7 @@ export default function Header() {
     // Define redux global state handlers:
     const dispatch = useDispatch();
     const { currentUser, userList, loading, error } = useSelector(state => state.users)
+    const navigate = useNavigate();
 
     // Load users list on component mount:
     useEffect(() => {
@@ -21,16 +22,22 @@ export default function Header() {
         dispatch({ type: 'users/setUser', payload: selectedUser });
     }
 
+    // When user clicks the logout button, clear currentUser and redirect to Home:
+    const handleLogout = () => {
+        dispatch(logout());
+        navigate("/");
+    };
+
 
     return(
         <header>
-            <h2 className="header--title"><NavLink to='/' className="header--link">Tuition Reimbursement Management System</NavLink></h2>
+            <h2 className="header--title"><NavLink to='/'>Tuition Reimbursement Management System</NavLink></h2>
             { currentUser ?
                 <ul>
                     <li><NavLink to='/forms' className="header--link">User Control Panel</NavLink></li>
                     <li><NavLink to='/forms' className="header--link">Forms</NavLink></li>
                     <li><NavLink to='/messages' className="header--link">Messages</NavLink></li>
-                    <li><NavLink to='/logout' className="header--link">Logout</NavLink></li>
+                    <li><button onClick={handleLogout} className="header--link header--button">Logout</button></li>
                 </ul>
                 :
                 <ul>

@@ -37,7 +37,15 @@ const userSlice = createSlice({
         userList: [],
         currentUser: null
     },
-    reducers: {},
+    reducers: {
+        setCurrentUser(state, action) {
+            const {username, password} = action.payload;
+            state.currentUser = username;
+        },
+        logout(state) {
+            state.currentUser = null;
+        }
+    },
     extraReducers: builder => {
         builder
 
@@ -75,5 +83,7 @@ const userSlice = createSlice({
             })
     },
 });
+
+export const { setCurrentUser, logout } = userSlice.actions;
 
 export default userSlice.reducer;

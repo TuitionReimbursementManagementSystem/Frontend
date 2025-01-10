@@ -101,6 +101,8 @@ export default function AttachmentsForm() {
         navigate("/forms/form");
     };
 
+    console.log(JSON.stringify(form));
+
     return(
         <form onSubmit={handleSubmit}>
             <p>Form ID: {form.id}</p>

@@ -102,6 +102,11 @@ const formSlice = createSlice({
             state.form = action.payload;
         },
 
+        // Clear the current form so that we can create a new form:
+        clearForm(state) {
+            state.form = null;
+        },
+
         // Set form Status value for filtering:
         setStatus(state, action) {
             state.status = action.payload;
@@ -187,6 +192,6 @@ const formSlice = createSlice({
     }
 });
 
-export const { setForm, setStatus, setLoading } = formSlice.actions;
+export const { setForm, clearForm, setStatus, setLoading } = formSlice.actions;
 
 export default formSlice.reducer;

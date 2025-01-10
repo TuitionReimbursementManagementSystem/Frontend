@@ -225,6 +225,19 @@ input:focus, textarea:focus, select:focus {
   background-color: #D6A831;
 }
 
+.form--link {
+  text-align: center;
+}
+
+/* Used in View Form document */
+.form--value {
+  background-color: #f0f0f0;
+  padding: 0.625rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  color: #333;
+}
+
 /* Text decoration for error messages */
 .error {
   color: red;

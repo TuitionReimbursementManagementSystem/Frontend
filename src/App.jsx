@@ -12,6 +12,8 @@ import AttachmentsForm from './components/forms/AttachmentsForm'
 import FormsDashboard from './components/forms/FormsDashboard'
 import FormsTable from './components/forms/FormsTable'
 import ViewForm from './components/forms/ViewForm'
+import EditForm from './pages/EditForm'
+import MessagesDashboard from './components/messages/MessagesDashboard'
 
 function App() {
 
@@ -23,6 +25,8 @@ function App() {
           <Route path='/' element={<Home />} />
           <Route path='/register' element={<Registration />} />
           <Route path='/login' element={<Login />} />
+
+          {/* Forms */}
           <Route path='/forms' element={<Forms />}>
             <Route path='' element={<FormsDashboard />} />
             <Route path='new' element={<NewForm />} />
@@ -30,7 +34,14 @@ function App() {
             <Route path='table' element={<FormsTable />} />
             <Route path='form' element={<ViewForm />} />
           </Route>
-          <Route path='/messages' element={<Messages />} />
+          <Route path='/forms/edit' element={<EditForm />} />
+
+          {/* Messages */}
+          <Route path='/messages' element={<Messages />}>
+            <Route path='' element={<MessagesDashboard />} />
+          </Route>
+
+
           <Route path='*' element={<Home />} />
         </Routes>
         <Footer />

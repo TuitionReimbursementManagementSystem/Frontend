@@ -1,21 +1,42 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import Dropdown from "./Dropdown";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { getAllUsers, logout } from "../features/users/userSlice";
+import { getApprovalRequestMessagesByUsername } from "../features/messages/messageSlice";
 
 
 export default function Header() {
 
     // Define redux global state handlers:
     const dispatch = useDispatch();
-    const { currentUser, userList, loading, error } = useSelector(state => state.users)
+    const { currentUser, userList, loading, error } = useSelector(state => state.users);
+    const { approvalMessagesList } = useSelector(state => state.messages);
     const navigate = useNavigate();
 
     // Load users list on component mount:
     useEffect(() => {
         dispatch(getAllUsers());
     }, [dispatch]);
+
+    // If a user is logged in, continously poll the MessageService for new messages.
+    // Note: This is not a good solution, but will do for now. Eventual refactor: Server-Side Events
+    useEffect(() => {
+        if(currentUser) {
+            const fetchmessages = () => dispatch(getApprovalRequestMessagesByUsername(currentUser.toLowerCase()));
+            fetchmessages();
+
+            const intervalId = setInterval(fetchmessages, 5000);
+            return () => clearInterval(intervalId);
+        }
+    }, [dispatch, currentUser])
+
+    // Count the number of unread messages in the user's inbox so that we can display
+    // a notification:
+    const unreadMessageCount = useMemo(() => {
+        if(currentUser) {
+            return approvalMessagesList.filter(message => !message.viewed).length;
+        }
+    }, [currentUser, approvalMessagesList]);
 
     const handleChange = (e) => {
         const selectedUser = e.target.value;
@@ -36,7 +57,7 @@ export default function Header() {
                 <ul>
                     <li><NavLink to='/forms' className="header--link">User Control Panel</NavLink></li>
                     <li><NavLink to='/forms' className="header--link">Forms</NavLink></li>
-                    <li><NavLink to='/messages' className="header--link">Messages</NavLink></li>
+                    <li><NavLink to='/messages' className="header--link">Messages{unreadMessageCount > 0 ? `(${unreadMessageCount})` : null}</NavLink></li>
                     <li><button onClick={handleLogout} className="header--link header--button">Logout</button></li>
                 </ul>
                 :

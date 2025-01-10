@@ -31,7 +31,6 @@ export default function FormsTable() {
                         <th>Form Id</th>
                         <th>Status</th>
                         <th>Urgent</th>
-                        <th>Reason Denied</th>
                         <th>Date</th>
                         <th>Time</th>
                         <th>Location</th>
@@ -55,14 +54,13 @@ export default function FormsTable() {
                         return(
                             <tr key={form.id}>
                                 <td><Link to="/forms/form" onClick={() => handleClick(form)}>{form.id}</Link></td>
-                                <td>{form.status}</td>
+                                <td>{form.status.replace(/_/g, " ")}</td>
                                 <td className={form.urgent ? "urgent" : ''}>{form.urgent ? "Yes" : "No"}</td>
-                                <td>{form.reasonDenied}</td>
                                 <td>{form.date}</td>
                                 <td>{form.time}</td>
                                 <td>{form.location}</td>
                                 <td>{form.description}</td>
-                                <td>{form.eventType}</td>
+                                <td>{form.eventType.replace(/_/g, " ")}</td>
                                 <td>{form.gradeFormat}</td>
                                 <td>{form.passingGrade}</td>
                                 <td className="cost">{form.cost}</td>

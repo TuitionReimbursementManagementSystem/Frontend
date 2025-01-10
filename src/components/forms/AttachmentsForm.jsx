@@ -98,7 +98,6 @@ export default function AttachmentsForm() {
     const handleSubmit = (event) => {
         event.preventDefault();
         dispatch(submitForm({id: form.id, "username": currentUser}));
-        navigate("/forms/form");
     };
 
     console.log(JSON.stringify(form));

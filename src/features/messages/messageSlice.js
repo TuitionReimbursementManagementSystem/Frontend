@@ -3,11 +3,11 @@ import axios from "axios";
 import { API_URL } from "../../config/config";
 
 // Get all of a user's approval request messages:
-export const getApprovalRequestMessagesByUsername = createAsyncThunk(
-    'messages/getApprovalRequestMessagesByUsername',
+export const getApprovalRequestsByUsername = createAsyncThunk(
+    'messages/getApprovalRequestsByUsername',
     async (username, { rejectWithValue }) => {
         try {
-            const response = await axios.get(`${API_URL}/kinesis/pending`,
+            const response = await axios.get(`${API_URL}/messages/approval-requests`,
                 {
                     headers: { username }
                 }
@@ -41,15 +41,15 @@ const messageSlice = createSlice({
     },
     extraReducers: builder => {
         builder
-            .addCase(getApprovalRequestMessagesByUsername.pending, state => {
+            .addCase(getApprovalRequestsByUsername.pending, state => {
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(getApprovalRequestMessagesByUsername.fulfilled, (state, action) => {
+            .addCase(getApprovalRequestsByUsername.fulfilled, (state, action) => {
                 state.loading = false;
                 state.approvalMessagesList = action.payload;
             })
-            .addCase(getApprovalRequestMessagesByUsername.rejected, (state, action) => {
+            .addCase(getApprovalRequestsByUsername.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             })

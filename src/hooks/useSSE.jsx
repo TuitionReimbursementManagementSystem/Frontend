@@ -12,8 +12,11 @@ export const useSSE = (username) => {
 
     useEffect(() => {
         // Define endpoint for source of SSE's:
-        console.log("useSSE username: " + username);
-        const eventSource = new EventSource(`${API_URL}/kinesis/pending?username=${username}`);
+        console.log("useSSE called for username: " + username);
+        // Using a cache:
+        const eventSource = new EventSource(`${API_URL}/messages/pending?username=${username}`);
+        // Using kinesis:
+        //const eventSource = new EventSource(`${API_URL}/kinesis/pending?username=${username}`);
 
         // When a new message arrives, parse it into an object and update
         // our messages list:
@@ -27,8 +30,19 @@ export const useSSE = (username) => {
             console.log("Connection error: " + JSON.stringify(error));
             setSseError('Error occured with SSE connection');
             dispatch(setError('SSE connection error'));
+
             // If it didn't work, try to reconnect after a 5 second delay:
-            setTimeout(() => eventSource.close(), 5000);
+            if(eventSource.readyState === EventSource.CLOSED) {
+                setTimeout(() => {
+                    console.log("Attempting to reconnect SSE");
+                    eventSource.close();
+                    const newSource = new EventSource(`${API_URL}/messages/pending?username=${username}`);
+                    //const newSource = new EventSource(`${API_URL}/kinesis/pending?username=${username}`);
+                    newSource.onmessage = eventSource.onmessage;
+                    newSource.onopen = eventSource.onopen;
+                    newSource.onerror = eventSource.onerror;
+                }, 5000);
+            }
         }
 
         eventSource.onopen = () => {

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useMemo, useState } from "react";
 import { getAllUsers, logout } from "../features/users/userSlice";
 import { useSSE } from "../hooks/useSSE";
+import { getApprovalRequestsByUsername } from "../features/messages/messageSlice";
 
 
 export default function Header() {
@@ -18,6 +19,14 @@ export default function Header() {
     useEffect(() => {
         dispatch(getAllUsers());
     }, [dispatch]);
+
+    // Load user's messages when a new user logs in so we can display an unread messages notification:
+    useEffect(() => {
+        if(currentUser) {
+            console.log(`Getting requests for ${currentUser}...`);
+            dispatch(getApprovalRequestsByUsername(currentUser));
+        }
+    }, [dispatch, currentUser]);
 
     // Count the number of unread messages in the user's inbox so that we can display
     // a notification:

@@ -29,6 +29,18 @@ export const updateForm = createAsyncThunk(
     }
 );
 
+// Cancel reimbursement request. Deletes the form but only if it has not yet been awarded:
+export const cancelForm = createAsyncThunk(
+    'forms/cancelForm',
+    async (id, { rejectWithValue }) => {
+        try {
+            await axios.delete(`${API_URL}/forms/${id}`);
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+)
+
 // Update one of the attachment fields of an existing Form action:
 export const updateAttachment = createAsyncThunk(
     'forms/updateAttachment',
@@ -186,6 +198,19 @@ const formSlice = createSlice({
                 state.userForms = action.payload;
             })
             .addCase(getUserForms.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+
+            // Cancel a request form:
+            .addCase(cancelForm.pending, state => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(cancelForm.fulfilled, state => {
+                state.loading = false;
+            })
+            .addCase(cancelForm.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             })

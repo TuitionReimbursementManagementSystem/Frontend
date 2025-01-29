@@ -229,6 +229,21 @@ input:focus, textarea:focus, select:focus {
   text-align: center;
 }
 
+/* Spin animation to play while loading */
+@keyframes spinning {
+  0% {
+    transform: rotateZ(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading--icon {
+  height: 3rem;
+  animation: spinning 1s ease-in-out infinite;
+}
+
 /* Used in View Form document */
 .form--value {
   background-color: #f0f0f0;

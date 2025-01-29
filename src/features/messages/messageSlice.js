@@ -7,7 +7,7 @@ export const getApprovalRequestMessagesByUsername = createAsyncThunk(
     'messages/getApprovalRequestMessagesByUsername',
     async (username, { rejectWithValue }) => {
         try {
-            const response = await axios.get(`${API_URL}/messages/pending-my-approval`,
+            const response = await axios.get(`${API_URL}/kinesis/pending`,
                 {
                     headers: { username }
                 }
@@ -25,10 +25,19 @@ const messageSlice = createSlice({
     initialState: {
         approvalMessagesList: [],
         loading: false,
-        error: null
+        error: null,
+        sseConnection: null
     },
     reducers: {
-
+        addMessage(state, action) {
+            state.approvalMessagesList.push(action.payload);
+        },
+        setConnectionStatus(state, action) {
+            state.sseConnection = action.payload;
+        },
+        setError(state, action) {
+            state.error = action.payload;
+        }
     },
     extraReducers: builder => {
         builder
@@ -47,5 +56,6 @@ const messageSlice = createSlice({
     }
 });
 
+export const { addMessage, setConnectionStatus, setError } = messageSlice.actions;
 
 export default messageSlice.reducer;

@@ -12,7 +12,7 @@ export default function Header() {
     const dispatch = useDispatch();
     const { currentUser, userList, loading, error } = useSelector(state => state.users);
     const { approvalMessagesList, sseConnection } = useSelector(state => state.messages);
-    const { sseError } = useSSE(currentUser);
+    //const { sseError } = useSSE(currentUser);
     const navigate = useNavigate();
 
     // Load users list on component mount:

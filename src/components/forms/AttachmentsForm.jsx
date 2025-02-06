@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import { setLoading, submitForm, updateAttachment } from "../../features/forms/formSlice";
 import { API_URL } from "../../config/config";
@@ -100,7 +100,12 @@ export default function AttachmentsForm() {
         dispatch(submitForm({id: form.id, "username": currentUser}));
     };
 
-    console.log(JSON.stringify(form));
+    // Once the form has been submitted, navigate away from the attachments page and view the completed form:
+    useEffect(() => {
+        if(form.status != "CREATED") {
+            navigate("/forms/form");
+        }
+    }, [form])
 
     return(
         <form onSubmit={handleSubmit}>

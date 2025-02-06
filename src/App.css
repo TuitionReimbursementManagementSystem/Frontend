@@ -219,6 +219,7 @@ input:focus, textarea:focus, select:focus {
   font-size: 1.2rem;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  align-content: center;
 }
 
 .form--button:hover {
@@ -342,6 +343,20 @@ th.reimbursement {
 
 td.reimbursement {
   padding-right: 4rem;
+}
+
+.message--table--button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  cursor: pointer;
+  border: none;
+  font-size: 1rem;
+}
+
+.message--icon {
+  width: 2rem;
 }
 
 /* For small screen devices */

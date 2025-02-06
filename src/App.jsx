@@ -14,6 +14,8 @@ import FormsTable from './components/forms/FormsTable'
 import ViewForm from './components/forms/ViewForm'
 import EditForm from './pages/EditForm'
 import MessagesDashboard from './components/messages/MessagesDashboard'
+import ApprovalMessagesTable from './components/messages/ApprovalMessagesTable'
+import ApprovalMessage from './components/messages/ApprovalMessage'
 
 function App() {
 
@@ -39,6 +41,8 @@ function App() {
           {/* Messages */}
           <Route path='/messages' element={<Messages />}>
             <Route path='' element={<MessagesDashboard />} />
+            <Route path='approval-requests' element={<ApprovalMessagesTable />} />
+            <Route path='approval-requests/message' element={<ApprovalMessage />} />
           </Route>
 
 

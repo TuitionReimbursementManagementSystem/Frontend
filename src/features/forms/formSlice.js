@@ -16,6 +16,19 @@ export const createForm = createAsyncThunk(
     }
 );
 
+// Look up a form by its id:
+export const getFormById = createAsyncThunk(
+    'forms/getFormById',
+    async (id, { rejectWithValue }) => {
+        try {
+            const response = await axios.get(`${API_URL}/forms/${id}`);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
 // Update basic Form data of an existing Form action:
 export const updateForm = createAsyncThunk(
     'forms/updateForm',
@@ -141,6 +154,20 @@ const formSlice = createSlice({
                 state.form = action.payload;
             })
             .addCase(createForm.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+
+            // View Form by id:
+            .addCase(getFormById.pending, state => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(getFormById.fulfilled, (state,action) => {
+                state.loading =false;
+                state.form = action.payload;
+            })
+            .addCase(getFormById.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             })

@@ -10,7 +10,8 @@ export const createForm = createAsyncThunk(
         try {
             const response = await axios.post(`${API_URL}/forms`, formData);
             return response.data;
-        } catch (error) {
+        } 
+        catch (error) {
             return rejectWithValue(error.response.data);
         }
     }
@@ -23,7 +24,27 @@ export const getFormById = createAsyncThunk(
         try {
             const response = await axios.get(`${API_URL}/forms/${id}`);
             return response.data;
-        } catch (error) {
+        } 
+        catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
+// Fetch all Forms associated with a given user. Optionally, include a status param to filter and return a subset:
+export const getUserForms = createAsyncThunk(
+    'forms/getUserForms',
+    async ({ currentUser, status }, { rejectWithValue }) => {
+        try {
+            const response = await axios.get(`${API_URL}/forms/active`,
+                { 
+                    params: {status},
+                    headers: {"username": currentUser}
+                }
+            );
+            return response.data;
+        } 
+        catch (error) {
             return rejectWithValue(error.response.data);
         }
     }
@@ -36,7 +57,8 @@ export const updateForm = createAsyncThunk(
         try {
             const response = await axios.put(`${API_URL}/forms/${updatedData.id}`, updatedData);
             return response.data;
-        } catch (error) {
+        } 
+        catch (error) {
             return rejectWithValue(error.response.data);
         }
     }
@@ -48,7 +70,8 @@ export const cancelForm = createAsyncThunk(
     async (id, { rejectWithValue }) => {
         try {
             await axios.delete(`${API_URL}/forms/${id}`);
-        } catch (error) {
+        } 
+        catch (error) {
             return rejectWithValue(error.response.data);
         }
     }
@@ -69,7 +92,8 @@ export const updateAttachment = createAsyncThunk(
                 }
             );
             return response.data;
-        } catch (error) {
+        } 
+        catch (error) {
             return rejectWithValue(error.response.data);
         }
     }
@@ -83,34 +107,32 @@ export const submitForm = createAsyncThunk(
         try {
             const response = await axios.put(`${API_URL}/forms/${id}/submit`,
                 null,
-                { headers: {"username": username} }
+                { headers: { username } }
             );
             return response.data;
-        } catch (error) {
+        } 
+        catch (error) {
             return rejectWithValue(error.response.data);
         }
     }
 );
 
-// Fetch all Forms associated with a given user. Optionally, include a status param to filter and return a subset:
-export const getUserForms = createAsyncThunk(
-    'forms/getUserForms',
-    async ({ currentUser, status }, { rejectWithValue }) => {
+// Supervisor approval:
+export const supervisorApproval = createAsyncThunk(
+    'forms/supervisorApproval',
+    async ({ id, username }, { rejectWithValue }) => {
         try {
-            const response = await axios.get(`${API_URL}/forms/active`,
-                { 
-                    params: {status},
-                    headers: {"username": currentUser}
-                }
+            const response = await axios.put(`${API_URL}/forms/${id}/supervisor-approve`,
+                null,
+                { headers: { username } }
             );
             return response.data;
-        } catch (error) {
-            return rejectWithValue(error.response.data);
+        } 
+        catch (error) {
+            return rejectWithValue(error);
         }
     }
 );
-
-
 
 const formSlice = createSlice({
     name: 'forms',
@@ -172,6 +194,20 @@ const formSlice = createSlice({
                 state.error = action.payload;
             })
 
+            // Retrieve all Forms created by user:
+            .addCase(getUserForms.pending, state => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(getUserForms.fulfilled, (state, action) => {
+                state.loading = false;
+                state.userForms = action.payload;
+            })
+            .addCase(getUserForms.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+
             // Update existing Form:
             .addCase(updateForm.pending, state => {
                 state.loading = true;
@@ -182,6 +218,19 @@ const formSlice = createSlice({
                 state.form = action.payload;
             })
             .addCase(updateForm.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+
+            // Cancel a request form:
+            .addCase(cancelForm.pending, state => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(cancelForm.fulfilled, state => {
+                state.loading = false;
+            })
+            .addCase(cancelForm.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             })
@@ -215,29 +264,16 @@ const formSlice = createSlice({
                 state.error = action.payload;
             })
 
-            // Retrieve all Forms created by user:
-            .addCase(getUserForms.pending, state => {
+            // Supervisor grant approval:
+            .addCase(supervisorApproval.pending, state => {
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(getUserForms.fulfilled, (state, action) => {
+            .addCase(supervisorApproval.fulfilled, (state, action) => {
                 state.loading = false;
-                state.userForms = action.payload;
+                state.form = action.payload;
             })
-            .addCase(getUserForms.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload;
-            })
-
-            // Cancel a request form:
-            .addCase(cancelForm.pending, state => {
-                state.loading = true;
-                state.error = null;
-            })
-            .addCase(cancelForm.fulfilled, state => {
-                state.loading = false;
-            })
-            .addCase(cancelForm.rejected, (state, action) => {
+            .addCase(supervisorApproval.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             })

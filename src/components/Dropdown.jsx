@@ -43,6 +43,7 @@ export default function Dropdown({
                 <p style={{ color: "red" }}>{error}</p>
             ) : (
                 <select
+                    className="form--field"
                     name={name}
                     value={value || ""}
                     onChange={onChange}

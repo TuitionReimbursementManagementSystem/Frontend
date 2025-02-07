@@ -149,7 +149,7 @@ form {
   padding: 1.25rem;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  max-width: 60rem;
+  width: 50rem;
   margin: 2.5rem auto;
   animation: fadeIn 1s ease-out;
 }
@@ -177,10 +177,12 @@ fieldset {
   display: flex;
   gap: 2rem;
   justify-content: space-between;
+  flex-grow: 1;
 }
 
 .form--field {
   margin-bottom: 1rem;
+  flex-grow: 1;
 }
 
 label {
@@ -357,6 +359,25 @@ td.reimbursement {
 
 .message--icon {
   width: 2rem;
+}
+
+/* Dashboard styling */
+.dashboard--button {
+  background-color: #CEB888;
+  color: #782F40;
+  width: 100%;
+  padding: 1.67rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  align-content: center;
+  animation: fadeIn 1s ease-out;
+}
+
+.dashboard--button:hover {
+  background-color: #D6A831;
 }
 
 /* For small screen devices */

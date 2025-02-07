@@ -10,6 +10,44 @@ export default function ReadOnlyForm() {
         <form>
             <h2>Request: {form.id}</h2>
             <fieldset>
+                <legend>Request Status Details</legend>
+                <div className="form--fields--container">
+                    <div className="form--field">
+                        <label htmlFor="status">Status</label>
+                        <input
+                            type="text"
+                            name="status"
+                            value={form.status.replace(/_/g, " ").toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase())}
+                            disabled
+                            readOnly
+                        />
+                    </div>
+                    <div className="form--field">
+                        <label htmlFor="Urgent">Urgent</label>
+                        <input
+                            type="text"
+                            name="urgent"
+                            value={form.urgent ? "Yes" : "No"}
+                            disabled
+                            readOnly
+                        />
+                    </div>
+                    {form.status === "DENIED" ? 
+                        <div className="form--fields--container">
+                            <div className="form--field">
+                                <label htmlFor="reasonDenied">Reason Denied</label>
+                                <textarea 
+                                    name="description"
+                                    value={form.reasonDenied}
+                                    disabled
+                                    readOnly
+                                />
+                            </div>
+                        </div>
+                    : null}
+                </div>
+            </fieldset>
+            <fieldset>
                 <legend>Employee Details</legend>
                 <div className="form--fields--container">
                     <div className="form--field">
@@ -108,7 +146,7 @@ export default function ReadOnlyForm() {
                     <label htmlFor="eventType">Event Type</label>
                     <input
                         name="eventType"
-                        value={form.eventType}
+                        value={form.eventType.replace(/_/g, " ").toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase())}
                         disabled
                         readOnly
                     />
@@ -118,7 +156,7 @@ export default function ReadOnlyForm() {
                         <label htmlFor="gradeFormat">Grade Format</label>
                         <input
                             name="gradeFormat"
-                            value={form.gradeFormat}
+                            value={form.gradeFormat.replace(/_/g, " ").toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase())}
                             disabled
                             readOnly
                         />
@@ -128,7 +166,7 @@ export default function ReadOnlyForm() {
                         <input 
                             type="text"
                             name="passingGrade"
-                            value={form.passingGrade}
+                            value={form.passingGrade.replace(/_/g, " ").toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase())}
                             disabled
                             readOnly
                         />
@@ -161,6 +199,49 @@ export default function ReadOnlyForm() {
                     <textarea 
                         name="justification"
                         value={form.justification}
+                        disabled
+                        readOnly
+                    />
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>Attachments</legend>
+                <div>
+                    <label htmlFor="attachment">Event Attachment</label>
+                    <input 
+                        type="text"
+                        name="attachment"
+                        value={form.attachment}
+                        disabled
+                        readOnly
+                    />
+                </div>
+                <div>
+                    <label htmlFor="supervisorAttachment">Supervisor Pre-approval</label>
+                    <input 
+                        type="text"
+                        name="supervisorAttachment"
+                        value={form.supervisorAttachment}
+                        disabled
+                        readOnly
+                    />
+                </div>
+                <div>
+                    <label htmlFor="departmentHeadAttachment">Department Head Pre-approval</label>
+                    <input 
+                        type="text"
+                        name="departmentHeadAttachment"
+                        value={form.departmentHeadAttachment}
+                        disabled
+                        readOnly
+                    />
+                </div>
+                <div>
+                    <label htmlFor="completionAttachment">Proof of Completion</label>
+                    <input 
+                        type="text"
+                        name="completionAttachment"
+                        value={form.completionAttachment}
                         disabled
                         readOnly
                     />
